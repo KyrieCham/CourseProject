@@ -1,6 +1,8 @@
 import numpy as np
 import collections
 import pandas as pd
+import glove
+import string
 from sklearn import svm
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
@@ -9,7 +11,16 @@ from sklearn.model_selection import cross_val_score
 def load_review_dataset(path):
     with open(path,'r',encoding='utf8') as f:
         content = f.readlines()
-    res = [line.strip('.').lower().split() for line in content]
+    res = []
+    for line in content:
+        a = line.strip('.').lower().split()
+        b = []
+        exclude = set(string.punctuation)
+        for word in a:
+            word = ''.join(ch for ch in word if ch not in exclude)
+            b.append(word)
+        res.append(b)
+    # res = [line.strip('.').lower().split() for line in content]
     return res
 
 def create_dictionary(messages):
@@ -42,6 +53,28 @@ def transform_text(messages, word_dictionary):
     return resArray
 
 
+def getAverageGlove(messages):
+    numRows = len(messages)
+    print(numRows)
+    resArray = np.zeros((numRows, 50))
+    for i in range(len(messages)):
+        message = messages[i]
+        # a = glove.loadWordVectors('the')
+        # print(a, 'aaa')
+        wordvector = np.zeros(50)
+        zero = np.zeros(50)
+        j = 0
+        for word in message:
+            a = glove.loadWordVectors(word)
+
+            if not (a == zero).all():
+                # print(word, wordvector)
+                j += 1
+                wordvector += a
+        resArray[i, :] = wordvector/j
+    print(resArray,'rrr')
+    return resArray
+
 def main():
     review_path = './data/review_full.txt'
     rate_path = './data/rate_full.txt'
@@ -49,13 +82,15 @@ def main():
     word_dict = create_dictionary(messages)
     resArray = transform_text(messages, word_dict)
     print('res array shape',resArray.shape)
+    glove = getAverageGlove(messages)
+    print('glove', glove.shape)
     # To construct the training dataset
     numOfDataPoints = len(resArray)
     numOfTraining = int(numOfDataPoints * 0.8)
-    trainingDataX = resArray[:3000, ]
+    trainingDataX = resArray[:, ]
     rateY = pd.read_csv(rate_path, header=None)
     print(len(rateY))
-    trainingDataY = rateY[:3000][0]
+    trainingDataY = rateY[:][0]
     # print(trainingDataX.shape, trainingDataY.shape)
     # devDataX = resArray[numOfTraining:, ]
     # devDataY = rateY[numOfTraining:][0]

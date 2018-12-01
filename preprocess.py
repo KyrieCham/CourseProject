@@ -1,5 +1,6 @@
 import csv
 import numpy as np
+import matplotlib.pyplot as plt
 
 def load_csv(csv_path):
     """Load dataset from a CSV file.
@@ -27,6 +28,7 @@ def load_csv(csv_path):
     # inputs = np.loadtxt(csv_path, delimiter=',', skiprows=1, usecols=x_cols)
     # labels = np.loadtxt(csv_path, delimiter=',', skiprows=1, usecols=l_cols)
     j = 0
+    rate=[0,0,0,0,0]
     with open('review_full.txt', 'w') as f:
         with open('rate_full.txt', 'w') as g:
             with open(csv_path, 'r') as csvFile:
@@ -41,9 +43,24 @@ def load_csv(csv_path):
                         g.write(row[l_cols[0]])
                         f.write('\n')
                         g.write('\n')
-                    # if j==100:
+                        if row[l_cols[0]] == '1':
+                            rate[0] += 1
+                        elif row[l_cols[0]] == '2':
+                            rate[1] += 1
+                        elif row[l_cols[0]] == '3':
+                            rate[2] += 1
+                        elif row[l_cols[0]] == '4':
+                            rate[3] += 1
+                        elif row[l_cols[0]] == '5':
+                            rate[4] += 1
+                            # if j==100:
                     #     break
                 print('review lines', j)
+    print('rate distribution', rate)
+    plt.bar(list(range(1,6)),rate)
+    plt.xlabel('Ratings')
+    plt.ylabel('Number of ratings')
+    plt.title('Rating Distribution')
     # with open('rate_full.txt', 'w') as f:
     #     with open(csv_path, 'r') as csvFile:
     #         reader = csv.reader(csvFile)
