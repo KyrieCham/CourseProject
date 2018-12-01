@@ -64,6 +64,7 @@ def getAverageGlove(messages):
         wordvector = np.zeros(50)
         zero = np.zeros(50)
         j = 0
+        nullExample = 0
         for word in message:
             a = glove.loadWordVectors(word)
 
@@ -71,7 +72,12 @@ def getAverageGlove(messages):
                 # print(word, wordvector)
                 j += 1
                 wordvector += a
-        resArray[i, :] = wordvector/j
+        if j != 0:
+            resArray[i, :] = wordvector/j
+        else:
+            resArray[i, :] = wordvector
+            nullExample += 1
+            print('This example is null', message)
     print(resArray,'rrr')
     return resArray
 
