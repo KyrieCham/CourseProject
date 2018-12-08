@@ -8,6 +8,14 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 
 
+train_review_path = './data/train.review.txt'
+train_rate_path = './data/train.rating.txt'
+dev_review_path = './data/dev.review.txt'
+dev_rate_path = './data/dev.rating.txt'
+test_review_path = './data/test.review.txt'
+test_rate_path = './data/test.rating.txt'
+review_path = './data/review_full.txt'
+
 def load_review_dataset(path):
     with open(path,'r',encoding='utf8') as f:
         content = f.readlines()
@@ -99,7 +107,47 @@ def getAverageGloveFromDict(messages):
         resArrays[i,:] = wordVector
     return resArrays
 
+def getCorrectness(predict, y):
+    length = len(predict)
+    count = 0
+    for j in range(length):
+        if predict[j] == y[j]:
+            count += 1
+    return count / length
 
+def runKNN():
+    print('Method: KNN')
+    train_messages = load_review_dataset(train_review_path)
+    train_resArray = getAverageGlove(train_messages)
+    dev_messages = load_review_dataset(dev_review_path)
+    dev_resArray = getAverageGlove(dev_messages)
+    test_messages = load_review_dataset(test_review_path)
+    test_resArray = getAverageGlove(test_messages)
+    trainingDataX = train_resArray[:, ]
+    devDataX = dev_resArray[:, ]
+    testDataX = test_resArray[:, ]
+    traRateY = pd.read_csv(train_rate_path, header=None)
+    devRateY = pd.read_csv(dev_rate_path, header=None)
+    tesRateY = pd.read_csv(test_rate_path, header=None)
+    trainingDataY = traRateY[:][0]
+    devDataY = devRateY[:][0]
+    testDataY = tesRateY[:][0]
+    diffK = []
+
+    diffK.append(KNeighborsClassifier(n_neighbors=4))
+    diffK.append(KNeighborsClassifier(n_neighbors=5))
+    diffK.append(KNeighborsClassifier(n_neighbors=6))
+
+
+    for n in range(len(diffK)):
+        classifier = diffK[n]
+        classifier.fit(trainingDataX, trainingDataY)
+        predict = classifier.predict(devDataX)
+        correct = getCorrectness(predict, devDataY)
+        print('The correctness of k=', n + 4, 'is', correct)
+        predict = classifier.predict(testDataX)
+        correct = getCorrectness(predict, testDataY)
+        print('The correctness of k=', n + 4, 'is', correct)
 
 def main():
     review_path = './data/review_small.txt'
@@ -107,7 +155,6 @@ def main():
     messages = load_review_dataset(review_path)
     # word_dict = create_dictionary(messages)
     # resArray = transform_text(messages, word_dict)
-    # print('res array shape',resArray.shape)
     glove = getAverageGlove(messages)
     print('glove', glove.shape)
     # To construct the training dataset
@@ -122,15 +169,15 @@ def main():
     # devDataY = rateY[numOfTraining:][0]
     # print(devDataY.shape, type(devDataY))
     # Once we have all the training data ready
-    print('Method: SVM')
+    # print('Method: SVM')
     # lin_clf = svm.LinearSVC()
     # lin_clf.fit(trainingDataX, trainingDataY)
 
     print('Method: KNN')
-    classifier = KNeighborsClassifier(n_neighbors=5)
+    runKNN()
     # classifier.fit(trainingDataX, trainingDataY)
     # predicted_labels = classifier.predict(devDataX)
-    print(cross_val_score(classifier, trainingDataX, trainingDataY, cv=5))
+    # print(cross_val_score(classifier, trainingDataX, trainingDataY, cv=5))
 
 
 if __name__ == "__main__":
