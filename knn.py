@@ -82,10 +82,10 @@ def loadTrainTestDataSet():
     traRateY = pd.read_csv(train_rate_path, header=None)
     devRateY = pd.read_csv(dev_rate_path, header=None)
     tesRateY = pd.read_csv(test_rate_path, header=None)
-    # print(len(traRateY))
     trainingDataY = traRateY[:][0]
+    devDataY = devRateY[:][0]
     testDataY = tesRateY[:][0]
-    return (trainingDataX,traRateY, devDataX, devRateY, testDataX,tesRateY)
+    return (trainingDataX, trainingDataY, devDataX, devDataY, testDataX, testDataY)
 
 def getCorrectness(predict, y):
     length = len(predict)
@@ -96,8 +96,8 @@ def getCorrectness(predict, y):
     return count / length
 
 def main():
-    review_path = './data/review_small.txt'
-    rate_path = './data/rate_small.txt'
+    review_path = './data/review_full.txt'
+    rate_path = './data/rate_full.txt'
     messages = load_review_dataset(review_path)
     word_dict = create_dictionary(messages)
     print('The length of dictionary is', len(word_dict))
@@ -114,10 +114,10 @@ def main():
 
     for n in range(len(diffK)):
         classifier = diffK[n]
-        classifier.fit(testDataX, tesRateY)
+        classifier.fit(trainingDataX, trainingRateY)
         predict = classifier.predict(devDataX)
         correct = getCorrectness(predict, devRateY)
-        print('The correctness is', correct)
+        print('The correctness of k=', n, 'is', correct)
 
 
 
