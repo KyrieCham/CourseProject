@@ -33,7 +33,7 @@ def loadGloveToDict(filePath = DEFAULT_FILE_PATH):
     :return: a dicitonary with word as the key and the glove vector
     as the value(an array).
     """
-    res = collections.defaultdict[list]
+    res = {}
     with open(filePath) as f:
         for line in f:
             line = line.strip()

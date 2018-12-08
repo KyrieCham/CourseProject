@@ -117,7 +117,7 @@ def main():
         classifier.fit(trainingDataX, trainingRateY)
         predict = classifier.predict(devDataX)
         correct = getCorrectness(predict, devRateY)
-        print('The correctness of k=', n, 'is', correct)
+        print('The correctness of k=', n+4, 'is', correct)
 
 
 

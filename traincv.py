@@ -55,30 +55,26 @@ def transform_text(messages, word_dictionary):
 
 def getAverageGlove(messages):
     numRows = len(messages)
-    print(numRows)
     resArray = np.zeros((numRows, 50))
+    gloveDict = glove.loadGloveToDict()
+    print('The length of glove dict is', len(gloveDict))
     for i in range(len(messages)):
         message = messages[i]
-        # a = glove.loadWordVectors('the')
-        # print(a, 'aaa')
         wordvector = np.zeros(50)
         zero = np.zeros(50)
         j = 0
         nullExample = 0
         for word in message:
-            a = glove.loadWordVectors(word)
-
-            if not (a == zero).all():
-                # print(word, wordvector)
+            if word in gloveDict:
                 j += 1
-                wordvector += a
+                wordvector += gloveDict[word]
+
         if j != 0:
             resArray[i, :] = wordvector/j
         else:
             resArray[i, :] = wordvector
             nullExample += 1
             print('This example is null', message)
-    print(resArray,'rrr')
     return resArray
 
 def getAverageGloveFromDict(messages):
@@ -112,7 +108,7 @@ def main():
     # word_dict = create_dictionary(messages)
     # resArray = transform_text(messages, word_dict)
     # print('res array shape',resArray.shape)
-    glove = getAverageGloveFromDict(messages)
+    glove = getAverageGlove(messages)
     print('glove', glove.shape)
     # To construct the training dataset
     # numOfDataPoints = len(resArray)
