@@ -42,7 +42,7 @@ def create_dictionary(messages):
     for key,val in tempDict.items():
         if(val>=6):
             resDict[key] = i
-            i +=1
+            i += 1
     return resDict
 
 def transform_text(messages, word_dictionary):

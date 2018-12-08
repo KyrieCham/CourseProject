@@ -91,6 +91,7 @@ def getAverageGloveFromDict(messages):
     resArrays = np.zeros([numRows,50])
     #Build the word dict from glove first
     gloveDict = glove.loadGloveToDict()
+    print('The length of glove dict is', len(gloveDict))
     for i in range(numRows):
         message = messages[i]
         wordVector = np.zeros(50)
@@ -98,24 +99,25 @@ def getAverageGloveFromDict(messages):
             if(word in gloveDict):
                 wordVector = np.stack([wordVector,gloveDict[word]])
         wordVector = np.mean(wordVector)
+        print(wordVector.shape)
         resArrays[i,:] = wordVector
     return resArrays
 
 
 
 def main():
-    review_path = './data/review_full.txt'
-    rate_path = './data/rate_full.txt'
+    review_path = './data/review_small.txt'
+    rate_path = './data/rate_small.txt'
     messages = load_review_dataset(review_path)
-    word_dict = create_dictionary(messages)
-    resArray = transform_text(messages, word_dict)
-    print('res array shape',resArray.shape)
-    glove = getAverageGlove(messages)
+    # word_dict = create_dictionary(messages)
+    # resArray = transform_text(messages, word_dict)
+    # print('res array shape',resArray.shape)
+    glove = getAverageGloveFromDict(messages)
     print('glove', glove.shape)
     # To construct the training dataset
-    numOfDataPoints = len(resArray)
-    numOfTraining = int(numOfDataPoints * 0.8)
-    trainingDataX = resArray[:, ]
+    # numOfDataPoints = len(resArray)
+    # numOfTraining = int(numOfDataPoints * 0.8)
+    trainingDataX = glove[:, ]
     rateY = pd.read_csv(rate_path, header=None)
     print(len(rateY))
     trainingDataY = rateY[:][0]
