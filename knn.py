@@ -47,9 +47,7 @@ def create_dictionary(messages):
 
 def transform_text(messages, word_dictionary):
     numRows = len(messages)
-    print(numRows)
     numCols = max(word_dictionary.values())+1
-    print(numCols)
     resArray = np.zeros((numRows,numCols))
     for i in range(len(messages)):
         message = messages[i]
@@ -98,14 +96,16 @@ def getCorrectness(predict, y):
     return count / length
 
 def main():
-    review_path = './data/review_full.txt'
-    rate_path = './data/rate_full.txt'
+    review_path = './data/review_small.txt'
+    rate_path = './data/rate_small.txt'
     messages = load_review_dataset(review_path)
     word_dict = create_dictionary(messages)
+    print('The length of dictionary is', len(word_dict))
     resArray = transform_text(messages,word_dict)
     #To construct the training dataset
+    print('Start to load dataset.')
     trainingDataX, trainingRateY, devDataX, devRateY, testDataX, tesRateY = loadTrainTestDataSet()
-
+    print('Dataset loaded.')
     diffK = []
 
     diffK.append(KNeighborsClassifier(n_neighbors=4))
@@ -114,7 +114,7 @@ def main():
 
     for n in range(len(diffK)):
         classifier = diffK[n]
-        classifier.fit(trainingDataX, trainingRateY)
+        classifier.fit(testDataX, tesRateY)
         predict = classifier.predict(devDataX)
         correct = getCorrectness(predict, devRateY)
         print('The correctness is', correct)
