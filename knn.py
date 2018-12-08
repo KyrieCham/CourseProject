@@ -104,7 +104,7 @@ def main():
     resArray = transform_text(messages,word_dict)
     #To construct the training dataset
     print('Start to load dataset.')
-    trainingDataX, trainingRateY, devDataX, devRateY, testDataX, tesRateY = loadTrainTestDataSet()
+    trainingDataX, trainingRateY, devDataX, devRateY, testDataX, testRateY = loadTrainTestDataSet()
     print('Dataset loaded.')
     diffK = []
 
@@ -117,7 +117,10 @@ def main():
         classifier.fit(trainingDataX, trainingRateY)
         predict = classifier.predict(devDataX)
         correct = getCorrectness(predict, devRateY)
-        print('The correctness of k=', n+4, 'is', correct)
+        print('The dev correctness of k=', n+4, 'is', correct)
+        predict = classifier.predict(testDataX)
+        correct = getCorrectness(predict, testRateY)
+        print('The test correctness of k=', n + 4, 'is', correct)
 
 
 

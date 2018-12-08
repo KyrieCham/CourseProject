@@ -144,10 +144,10 @@ def runKNN():
         classifier.fit(trainingDataX, trainingDataY)
         predict = classifier.predict(devDataX)
         correct = getCorrectness(predict, devDataY)
-        print('The correctness of k=', n + 4, 'is', correct)
+        print('The dev correctness of k=', n + 4, 'is', correct)
         predict = classifier.predict(testDataX)
         correct = getCorrectness(predict, testDataY)
-        print('The correctness of k=', n + 4, 'is', correct)
+        print('The test correctness of k=', n + 4, 'is', correct)
 
 def main():
     review_path = './data/review_small.txt'
