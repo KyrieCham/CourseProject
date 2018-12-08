@@ -81,6 +81,28 @@ def getAverageGlove(messages):
     print(resArray,'rrr')
     return resArray
 
+def getAverageGloveFromDict(messages):
+    """
+    Build a dictionary and use that to get the glove vector
+    :param messages: All the comments. Each row represent one comment
+    :return: the average glove vectors for each comment
+    """
+    numRows = len(messages)
+    resArrays = np.zeros([numRows,50])
+    #Build the word dict from glove first
+    gloveDict = glove.loadGloveToDict()
+    for i in range(numRows):
+        message = messages[i]
+        wordVector = np.zeros(50)
+        for word in message:
+            if(word in gloveDict):
+                wordVector = np.stack([wordVector,gloveDict[word]])
+        wordVector = np.mean(wordVector)
+        resArrays[i,:] = wordVector
+    return resArrays
+
+
+
 def main():
     review_path = './data/review_full.txt'
     rate_path = './data/rate_full.txt'
