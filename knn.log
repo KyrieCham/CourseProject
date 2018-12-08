@@ -1,0 +1,22 @@
+The length of glove dict is 400000
+glove (99, 50)
+99
+Method: KNN
+Method: KNN
+The length of glove dict is 400000
+This example is null ['reallllllllllllllllllllllllllllllllllllllllllllllly']
+This example is null ['httpswwwamazoncomdpb01j2g4vbgrefcmcrrypprdttlsol4']
+This example is null []
+This example is null ['asesome']
+This example is null []
+The length of glove dict is 400000
+This example is null ['loveeeeeeeee']
+The length of glove dict is 400000
+This example is null ['goodgoodgoodgoodgoodgoodgoodgoodgoodgoodgood']
+This example is null ['nocomment']
+The dev correctness of k= 4 is 0.5807161725858526
+The test correctness of k= 4 is 0.5759577278731837
+The dev correctness of k= 5 is 0.6260639859113589
+The test correctness of k= 5 is 0.6217525319242624
+The dev correctness of k= 6 is 0.6131493982976225
+The test correctness of k= 6 is 0.6158814031997651
