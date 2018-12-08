@@ -17,7 +17,7 @@ test_rate_path = './data/test.rating.txt'
 review_path = './data/review_full.txt'
 
 def load_review_dataset(path):
-    with open(path,'r',encoding='utf8') as f:
+    with open(path,'r') as f:
         content = f.readlines()
     res = []
     for line in content:
@@ -98,8 +98,8 @@ def getCorrectness(predict, y):
     return count / length
 
 def main():
-    review_path = './data/review_small.txt'
-    rate_path = './data/rate_small.txt'
+    review_path = './data/review_full.txt'
+    rate_path = './data/rate_full.txt'
     messages = load_review_dataset(review_path)
     word_dict = create_dictionary(messages)
     resArray = transform_text(messages,word_dict)
