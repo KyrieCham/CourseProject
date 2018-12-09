@@ -11,7 +11,7 @@ train_rate = np.zeros([21000])
 with open(train_rate_path, 'r') as f:
     i = 0
     for line in f:
-        train_rate[0] = str(line)
+        train_rate[i] = int(line) - 1
         i += 1
 
 train_rate_path = './data/test.rating.txt'
@@ -19,19 +19,20 @@ test_rate = np.zeros([6813])
 with open(train_rate_path, 'r') as f:
     i = 0
     for line in f:
-        test_rate[0] = str(line)
+        test_rate[i] = int(line) - 1
         i += 1
 
 def buildModel(X_train,y_train,X_test,y_test,batch_size):
     print('Build model...')
     model = Sequential()
-    #model.add(Embedding(max_features, 128, dropout=0.2))
-    # model.add(LSTM(128, dropout_W=0.2, dropout_U=0.2, input_shape=4223))  # try using a GRU instead, for fun
-    model.add(Dense(128))
+    X_train = np.array(X_train).reshape([21000,1,4223])
+    X_test = np.array(X_test).reshape([6813, 1, 4223])
+    model.add(LSTM(1, dropout_W=0.2, dropout_U=0.2, input_shape=(1,4223)))  # try using a GRU instead, for fun
+    model.add(Dense(5))
     # model.add(Dense(1))
     model.add(Activation('softmax'))
 
-    model.compile(loss='categorical-crossentropy',
+    model.compile(loss='sparse_categorical_crossentropy',
                   optimizer='adam',
                   metrics=['accuracy'])
 
