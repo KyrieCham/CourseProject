@@ -11,27 +11,27 @@ import pandas as pd
 max_features = 50
 
 train_rate_path = './data/train.rating.txt'
-train_rate = np.zeros([21000])
+train_rate = np.zeros([21000, 5])
 with open(train_rate_path, 'r') as f:
     i = 0
     for line in f:
-        train_rate[i] = int(line) - 1
+        train_rate[i, int(line) - 1] = 1
         i += 1
 
 test_rate_path = './data/test.rating.txt'
-test_rate = np.zeros([6813])
+test_rate = np.zeros([6813, 5])
 with open(test_rate_path, 'r') as f:
     i = 0
     for line in f:
-        test_rate[i] = int(line) - 1
+        test_rate[i, int(line) - 1] = 1
         i += 1
 
 dev_rate_path = './data/dev.rating.txt'
-dev_rate = np.zeros([6814])
+dev_rate = np.zeros([6814, 5])
 with open(dev_rate_path, 'r') as f:
     i = 0
     for line in f:
-        dev_rate[i] = int(line) - 1
+        dev_rate[i, int(line) - 1] = 1
         i += 1
 
 def getPaddingGlove(messages):
@@ -64,7 +64,7 @@ def buildModel(X_train,y_train,devDataX, devRateY,X_test,y_test,batch_size):
     model.add(Dense(5))
     model.add(Activation('softmax'))
     sgd = optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-    model.compile(loss='sparse_categorical_crossentropy',
+    model.compile(loss='categorical_crossentropy',
                   optimizer=sgd,
                   metrics=['accuracy'])
 
